@@ -1,0 +1,15 @@
+'\quando aparece um erro, aperta enter, qndo nao segue o baile
+
+Do While session.findById("wnd[0]/sbar").messagetype = "W"
+	session.findById("wnd[0]").sendVKey 0 '\ aperta Enter
+Loop
+ThisWorkbook.Sheets("Sheet1").Range("D"&i).Value = "done" '\msg qndo nao da erro
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+'\qdo da erro aperta enter, qndo nao segue e imprime o texto de cada operacao
+Do While session.findById("wnd[0]/sbar").messagetype = "W"
+	session.findById("wnd[0]").sendVKey 0
+Loop
+ThisWorkbook.Sheets("Sheet1").Range("D"&i).Value = sessionSAP.findById("wnd[0]/sbar").Text

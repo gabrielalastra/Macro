@@ -1,0 +1,75 @@
+ '\para abrir o a tela independente da tela de SAP que esteja aberta
+Sub nome()
+
+Const Session_number_max = 6 'the maximum number of possible SAP sessions
+
+Dim session_number_()
+
+Dim SenderEqualReceiver As Integer
+Dim SenderEqualReceiver2 As Integer
+
+
+Dim ms As Double
+
+ms = 1.15740741E-08  ' one millisecond, in days = 1/(1000*24*60*60)
+
+
+Set SapGuiAuto = GetObject("SAPGUI")
+Set ApplicationSAP = SapGuiAuto.GetScriptingEngine
+Set Connection = ApplicationSAP.Children(0)
+Set sessionSAP = Connection.Children(0)
+
+
+
+session_number_all = Connection.Children.Count - 1
+
+For i = 1 To Session_number_max
+     ReDim Preserve session_number_(i)
+     session_number_(i) = 0
+
+Next
+
+
+For session_number = 0 To session_number_all
+     Set sessionSAP = Connection.Children(Int(session_number))
+     session_number_(sessionSAP.info.sessionnumber) = sessionSAP.info.sessionnumber
+Next
+
+If session_number_all < Session_number_max - 1 Then
+     sessionSAP.createsession
+     Do
+      Application.Wait (Now() + 500 * ms)
+      
+      x = Connection.Children.Count
+      If Connection.Children.Count - session_number_all >= 2 Then Exit Do
+     Loop
+     On Error Resume Next
+     Error_number = 1
+     For session_number = 0 To session_number_all + 1
+          Err.Clear
+          Set sessionSAP = Connection.Children(Int(session_number))
+          If Err.Number > 0 Or Err.Number < 0 Then Exit For
+      
+         If session_number_(sessionSAP.info.sessionnumber) = 0 Then
+            Error_number = 0
+            Exit For
+         End If
+         'session.findById("wnd[0]").iconify                          'So you can send another SAP session in the task bar.
+     Next
+     On Error GoTo 0
+Else
+ MsgBox "New session is not possible."
+End If
+
+
+
+
+If IsObject(wscript) Then
+   wscript.ConnectObject sessionSAP, "on"
+   wscript.ConnectObject ApplicationSAP, "on"
+
+End If
+
+
+........codigo
+End Sub

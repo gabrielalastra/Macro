@@ -1,0 +1,9 @@
+Sub name()
+
+last_row = ThisWorkbook.Sheets("Sheet1").Range("A" & Rows.Count).End(xlUP).Row
+
+For i = 2 To last_row
+	....
+Next i
+
+End Sub
