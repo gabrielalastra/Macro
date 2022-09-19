@@ -1,0 +1,21 @@
+'\ se tiver algum erro dentro do For, eh pra fazer Err1
+'\ antes do For coloca o codigo
+
+Sub nome()
+
+On Error goto Err1
+
+For i =2 To last_row
+	.....
+
+VoltaProFor: '\dar nome pra linha de baixo
+Next i 
+
+Exit Sub '\pra nao ficar em looping infinito quando acaba o For exit =/ end
+
+Err1:
+ThisWorkbook.Sheets("Sheet1").Range("D"&i).Value = "Error"
+
+Resume VoltaProFor
+
+End Sub
