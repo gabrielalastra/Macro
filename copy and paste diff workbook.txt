@@ -1,0 +1,42 @@
+Sub Update_Report_File()
+    
+Workbooks.Open Filename:="C:\Users\LASTRAFA\Desktop\TESTE VBA\data.csv"
+    
+
+' Copy from data and paste into Report
+    Workbooks("data.csv").Worksheets("data").Range("A2:I" & Rows.Count).Copy _
+        Workbooks("EscalationReportTest.xlsm").Worksheets("escalation report").Range("A2")
+' Close data duplicated
+    Workbooks("data.csv").Close SaveChanges:=True
+' Multilevel Sort
+    ActiveSheet.Range("A2:I" & Rows.Count).Sort Key1:=Range("G2"), Order1:=xlDescending, Key2:=Range("F2"), Order2:=xlDescending, Key3:=Range("H2"), Order3:=xlAscending
+    
+    
+    last_row = ThisWorkbook.Sheets("escalation report").Range("A" & Rows.Count).End(xlUp).Row
+
+For i = 2 To last_row
+    If Range("E" & i) = "ITSupport-CNHE" Then
+    ThisWorkbook.Sheets("escalation report").Range("I" & i).Value = "Zhu, Jinsong"
+    End If
+Next i
+
+
+End Sub
+
+'Starting a procedure to save a worksheet as new workbook
+Sub Save()
+
+'Declaring a variable as workbook to store the newly creating workbook
+Dim wb As Workbook
+
+'adding a new workbook and seting to wb object
+Set wb = Workbooks.Add
+
+'Copying a worksheet from ThisWorkbook into newly creadted workbook in the above statement
+ThisWorkbook.Sheets("escalation report").Copy Before:=wb.Sheets(1)
+
+'Saving the newly created Excel workbook into required folder with specific workbook name
+wb.SaveAs "C:\Users\LASTRAFA\Desktop\TESTE VBA\Repooooort.xlsx"
+
+'Ending sub procdure to save a worksheet as new workbook
+End Sub
